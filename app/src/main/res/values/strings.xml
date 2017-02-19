@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PopMovies</string>
+    <string name="mn_item_popular">Populars</string>
+    <string name="mn_item_top_rated">Top Rated</string>
+    <string name="mn_item_favorite">Favorite</string>
+    <string name="lb_detail_trailer">Trailers</string>
+    <string name="tv_main_no_result">There is no result to show.</string>
+    <string name="lb_detail_review">Reviews</string>
+    <string name="lb_detail_release_date">Release:</string>
+    <string name="lb_detail_rating">Average Rating:</string>
+    <string name="lb_detail_favorite">Favorite:</string>
+    <string name="lb_detail_review_author">Author:</string>
+</resources>
