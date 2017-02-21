@@ -3,6 +3,7 @@ package com.udacity.study.popmovies.utils;
 import android.net.Uri;
 import android.util.Log;
 
+import com.udacity.study.popmovies.BaseAppContext;
 import com.udacity.study.popmovies.exception.NoResultException;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getName();
 
-    private static final String TMDB_API_KEY = "<INSERT-YOUR-TMDB-API-KEY-HERE";
+    private static final String TMDB_API_KEY = BaseAppContext.TMDB_API_KEY;
 
     private static final String HOST_API_TMDB = "http://api.themoviedb.org/3/movie";
     private static final String HOST_IMAGES_TMDB = "http://image.tmdb.org/t/p/";

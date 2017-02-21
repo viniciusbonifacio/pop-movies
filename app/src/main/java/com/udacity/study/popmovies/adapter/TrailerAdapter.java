@@ -1,4 +1,4 @@
-package com.udacity.study.popmovies;
+package com.udacity.study.popmovies.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.udacity.study.popmovies.R;
 import com.udacity.study.popmovies.model.Trailer;
 
 /**
@@ -86,6 +87,9 @@ public class TrailerAdapter extends BaseAdapter implements View.OnClickListener 
         return trailerItem;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onClick(View v) {
 

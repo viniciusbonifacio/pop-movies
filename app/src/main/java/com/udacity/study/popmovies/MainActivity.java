@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.udacity.study.popmovies.adapter.PosterGridAdapter;
 import com.udacity.study.popmovies.data.MovieContract;
 import com.udacity.study.popmovies.model.Movie;
 import com.udacity.study.popmovies.exception.NoResultException;
