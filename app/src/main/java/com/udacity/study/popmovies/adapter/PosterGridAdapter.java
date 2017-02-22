@@ -1,6 +1,7 @@
 package com.udacity.study.popmovies.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,9 @@ public class PosterGridAdapter extends BaseAdapter {
         this.mContext = context;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getCount() {
         if (mMovies == null) {
@@ -36,17 +40,25 @@ public class PosterGridAdapter extends BaseAdapter {
         return mMovies.length;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getItem(int position) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long getItemId(int position) {
         return 0;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -59,24 +71,38 @@ public class PosterGridAdapter extends BaseAdapter {
             gridItem = layoutInflater.inflate(R.layout.poster_grid_item, parent, false);
             ImageView posterView = (ImageView) gridItem.findViewById(R.id.iv_film_poster);
 
-            try {
-
-                Picasso.with(mContext)
-                        .load(NetworkUtils.getFilmPosterUrl(mMovies[position].getPosterPath()).toString())
-                        .into(posterView);
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            loadPosterImage(posterView, mMovies[position]);
 
         } else {
 
             gridItem = convertView;
+            ImageView posterView = (ImageView) gridItem.findViewById(R.id.iv_film_poster);
+            loadPosterImage(posterView, mMovies[position]);
 
         }
 
         gridItem.setTag(mMovies[position]);
         return gridItem;
+    }
+
+    /**
+     *
+     * @param posterView
+     * @param movie
+     */
+    private void loadPosterImage(ImageView posterView, Movie movie){
+
+        if (posterView != null && movie != null){
+            try {
+
+                Picasso.with(mContext)
+                        .load(NetworkUtils.getFilmPosterUrl(movie.getPosterPath()).toString())
+                        .into(posterView);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
