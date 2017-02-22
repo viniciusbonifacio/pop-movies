@@ -2,7 +2,7 @@
 Udacity study project.
 
 
-Insert your The Movie Database **API key** in the `apikey.xml` file under `res/values` folder before use this app.
+Insert your The Movie Database **API key** in the `build.gradle` before use this app.
 
 > To fetch popular movies, you will use the API from [themoviedb.org](http://themoviedb.org).
 > If you don’t already have an account, you will need to create one in order to request an API Key.

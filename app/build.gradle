@@ -22,6 +22,11 @@ android {
         mavenCentral()
     }
 
+    defaultConfig{
+        ///////// TMDB API KEY - Insert your API key here. /////////
+        buildConfigField("String", "TMDB_API_KEY", "\"f296a92c7725d46ebb6159d297013bbf\"");
+    }
+
 }
 
 dependencies {
