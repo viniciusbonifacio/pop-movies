@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -148,8 +149,12 @@ public class MainActivity extends AppCompatActivity {
             edit.putString(sKeyBundleMenuSort, item.getTitle().toString()).apply();
         }
 
-        return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
 
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -167,6 +172,11 @@ public class MainActivity extends AppCompatActivity {
      *
      */
     private void bindUI() {
+
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         mPosterAdapter = new PosterGridAdapter(this);
 
         mPosterGridView = (GridView) findViewById(R.id.gv_poster_grid);
