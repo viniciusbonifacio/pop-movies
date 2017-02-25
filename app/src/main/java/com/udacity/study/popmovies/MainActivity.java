@@ -1,6 +1,7 @@
 package com.udacity.study.popmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -34,9 +35,19 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final String sKeyBundleMenuSort = "bundle_menu_sort";
+    private static final String sKeyBundleGridIndex = "bundle_grid_index";
+
+    /**
+     * Always check null
+     */
+    private static Bundle mSavedInstance;
+
+
     private GridView mPosterGridView;
     private PosterGridAdapter mPosterAdapter;
     private TextView mNoResultTv;
+
 
     /**
      * {@inheritDoc}
@@ -46,16 +57,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPosterAdapter = new PosterGridAdapter(this);
+        mSavedInstance = savedInstanceState;
 
-        mPosterGridView = (GridView) findViewById(R.id.gv_poster_grid);
-        mPosterGridView.setAdapter(mPosterAdapter);
-
-        mNoResultTv = (TextView) findViewById(R.id.tv_main_no_result);
+        bindUI();
 
         addListeners();
 
-        loadPopularMovies();
+        checkPreviousMenuOption();
     }
 
     /**
@@ -66,11 +74,54 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_activity_main, menu);
         return true;
+
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (mSavedInstance != null) {
+            String previousSelectedMenu = mSavedInstance.getString(sKeyBundleMenuSort);
+
+            if (previousSelectedMenu != null) {
+
+                MenuItem item = menu.findItem(R.id.mn_sort_order);
+                if (item != null) {
+                    item.setTitle(previousSelectedMenu);
+
+                    String popular = getString(R.string.mn_item_popular);
+                    String rated = getString(R.string.mn_item_top_rated);
+                    String favorite = getString(R.string.mn_item_favorite);
+
+                    if (String.valueOf(item.getTitle()).equalsIgnoreCase(popular)){
+                        loadPopularMovies();
+
+                    } else if (String.valueOf(item.getTitle()).equalsIgnoreCase(rated)) {
+                        loadBestRatedMovies();
+
+                    } else if (String.valueOf(item.getTitle()).equalsIgnoreCase(favorite)) {
+                        loadFavoriteMovies();
+                    }
+
+                }
+
+            }
+
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuId = item.getItemId();
+
 
         if (menuId == R.id.mn_sort_order){
 
@@ -91,9 +142,68 @@ public class MainActivity extends AppCompatActivity {
                 item.setTitle(popular);
                 loadPopularMovies();
             }
+
+            //used to restore previous menu state
+            SharedPreferences.Editor edit = getPreferences(MODE_PRIVATE).edit();
+            edit.putString(sKeyBundleMenuSort, item.getTitle().toString()).apply();
         }
 
         return super.onOptionsItemSelected(item);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(sKeyBundleGridIndex, mPosterGridView.getFirstVisiblePosition());
+
+        super.onSaveInstanceState(outState);
+    }
+
+    /**
+     *
+     */
+    private void bindUI() {
+        mPosterAdapter = new PosterGridAdapter(this);
+
+        mPosterGridView = (GridView) findViewById(R.id.gv_poster_grid);
+        mPosterGridView.setAdapter(mPosterAdapter);
+
+        mNoResultTv = (TextView) findViewById(R.id.tv_main_no_result);
+    }
+
+    /**
+     *
+     */
+    private void checkPreviousGridState(){
+
+        if (mSavedInstance != null) {
+            int previousGridViewPosition = mSavedInstance.getInt(sKeyBundleGridIndex);
+            mPosterGridView.setSelection(previousGridViewPosition);
+            mPosterGridView.smoothScrollToPosition(previousGridViewPosition);
+        }
+
+    }
+
+    /**
+     *
+     */
+    private void checkPreviousMenuOption(){
+
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        String previousSelectedMenu = preferences.getString(sKeyBundleMenuSort, null);
+
+        if (previousSelectedMenu != null) {
+
+            if (mSavedInstance == null) {
+                mSavedInstance = new Bundle();
+            }
+
+            mSavedInstance.putString(sKeyBundleMenuSort, previousSelectedMenu);
+        }
 
     }
 
@@ -267,6 +377,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mPosterAdapter.setMoviesData(movies);
                 mPosterAdapter.notifyDataSetChanged();
+                checkPreviousGridState();
 
             } else {
                 showGridResults(false);
